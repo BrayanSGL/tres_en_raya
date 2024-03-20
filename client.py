@@ -23,7 +23,7 @@ class TresEnRayaClient:
         self.client.close()
 
 if __name__ == "__main__":
-    HOST = '192.168.20.26'  # Cambiar a la dirección IP del servidor si es necesario
+    HOST =  socket.gethostbyname(socket.gethostname()) # Cambiar a la dirección IP del servidor si es necesario
     PORT = 6751  
     BUFFER_SIZE = 2048  
 
