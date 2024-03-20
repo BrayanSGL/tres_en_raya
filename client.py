@@ -15,15 +15,18 @@ class TresEnRayaClient:
         
     def run(self):
         while True:
-            move = input("Ingrese su movimiento (0-8): ")
-            client.send_message(f"{client.player}:{move}")
-            response = client.receive_message()
+            self.enter_move()
+            response = self.receive_message()
             print(response)
 
             if "winner" in response or "draw" in response:
                 break
 
         self.disconnect()
+        
+    def enter_move(self):
+        move = input("Ingrese su movimiento (0-8): ")
+        self.send_message(f"{self.player}:{move}")
 
     def send_message(self, message):
         self.client.sendall(message.encode('utf-8'))
