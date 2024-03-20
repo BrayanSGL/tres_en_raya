@@ -12,6 +12,18 @@ class TresEnRayaClient:
         self.client.connect((self.host, self.port))
         self.player = self.client.recv(self.buffer_size).decode('utf-8')
         print(f"Soy el jugador: {self.player}")
+        
+    def run(self):
+        while True:
+            move = input("Ingrese su movimiento (0-8): ")
+            client.send_message(f"{client.player}:{move}")
+            response = client.receive_message()
+            print(response)
+
+            if "winner" in response or "draw" in response:
+                break
+
+        self.disconnect()
 
     def send_message(self, message):
         self.client.sendall(message.encode('utf-8'))
@@ -21,6 +33,7 @@ class TresEnRayaClient:
 
     def disconnect(self):
         self.client.close()
+        
 
 if __name__ == "__main__":
     HOST =  socket.gethostbyname(socket.gethostname()) # Cambiar a la dirección IP del servidor si es necesario
@@ -29,14 +42,4 @@ if __name__ == "__main__":
 
     client = TresEnRayaClient(HOST, PORT, BUFFER_SIZE)
     client.connect()
-
-    while True:
-        move = input("Ingrese su movimiento (0-8): ")
-        client.send_message(f"{client.player}:{move}")
-        response = client.receive_message()
-        print(response)
-
-        if "winner" in response or "draw" in response:
-            break
-
-    client.disconnect()
+    client.run()
