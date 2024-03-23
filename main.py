@@ -79,8 +79,13 @@ class TresEnRayaServer:
         # Verificar si el movimiento es válido
         if self.board[move] == ' ':
             self.board[move] = player
-            #imprimir tablero
-            print(self.board)
+            #borrar consola
+            print("\033[H\033[J") 
+            print(self.board[0] + '|' + self.board[1] + '|' + self.board[2])
+            #separador
+            print(self.board[3] + '|' + self.board[4] + '|' + self.board[5])
+            #ultimas 3 posiciones
+            print(self.board[6] + '|' + self.board[7] + '|' + self.board[8])
             return True
         
         return False

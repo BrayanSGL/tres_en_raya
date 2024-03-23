@@ -23,7 +23,7 @@ class TresEnRayaClient:
         self.client.close()
 
 if __name__ == "__main__":
-    HOST = '192.168.20.14'  # Cambiar a la dirección IP del servidor si es necesario
+    HOST = '10.28.104.211'  # Cambiar a la dirección IP del servidor si es necesario
     PORT = 6751  
     BUFFER_SIZE = 2048  
 
@@ -32,6 +32,10 @@ if __name__ == "__main__":
 
     while True:
         move = input("Ingrese su movimiento (0-8): ")
+        # comprobar si el movimiento es válido y si es solo un número si no que avise que es inválido
+        if not move.isdigit() or int(move) < 0 or int(move) > 8:
+            print("Movimiento inválido")
+            continue
         client.send_message(f"{client.player}:{move}")
         response = client.receive_message()
         print(response)
