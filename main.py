@@ -57,9 +57,14 @@ class TresEnRayaServer:
             self.game_over = True
             self.broadcast('draw')
         else:
-            self.board = message.split(':') # Ejemplo: 'X:4'
-            self.turn = (self.turn + 1) % 2 # Cambiar de turno
-            self.broadcast(message) # Enviar el movimiento a los clientes
+            player, move = message.split(':')
+            if self.add_move(player, int(move)):
+                self.turn += 1
+                self.broadcast(f'{player}:{move}')
+                if self.check_winner():
+                    self.broadcast('winner')
+                elif self.turn == 9:
+                    self.broadcast('draw')
 
     def broadcast(self, message):
         for c in self.clients:
@@ -69,6 +74,26 @@ class TresEnRayaServer:
         client.close()
         self.clients.remove(client)
         self.broadcast('disconnect')
+
+    def add_move(self, player, move):
+        # Verificar si el movimiento es válido
+        if self.board[move] == ' ':
+            self.board[move] = player
+            #imprimir tablero
+            print(self.board)
+            return True
+        
+        return False
+    
+    def check_winner(self):
+        winning_combinations = [(0, 1, 2), (3, 4, 5), (6, 7, 8),
+                                (0, 3, 6), (1, 4, 7), (2, 5, 8),
+                                (0, 4, 8), (2, 4, 6)]
+        for a, b, c in winning_combinations:
+            if self.board[a] == self.board[b] == self.board[c] != ' ':
+                print(f"El ganador es {self.board[a]}")
+                return True
+        return False
 
 if __name__ == "__main__":
     HOST = socket.gethostname()  
